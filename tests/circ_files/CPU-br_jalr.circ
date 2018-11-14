@@ -150,7 +150,7 @@ This file is intended to be loaded by Logisim-evolution (https://github.com/reds
       <a name="valign" val="base"/>
     </tool>
   </lib>
-  <lib desc="file#/home/sruthi/cs61c-teaching/fa18/fa18-proj3-2-starter/cpu.circ" name="7"/>
+  <lib desc="file#cpu.circ" name="7"/>
   <main name="main"/>
   <options>
     <a name="gateUndefined" val="ignore"/>

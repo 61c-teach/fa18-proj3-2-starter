@@ -127,16 +127,19 @@ This file is intended to be loaded by Logisim-evolution (https://github.com/reds
     <a name="circuitnamedbox" val="false"/>
     <a name="circuitvhdlpath" val=""/>
     <appear>
-      <rect fill="none" height="45" stroke="#000000" stroke-width="2" width="81" x="50" y="55"/>
-      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="93" y="82">RAM</text>
-      <polyline fill="none" points="85,99 91,91" stroke="#000000"/>
-      <polyline fill="none" points="91,90 96,100" stroke="#000000"/>
-      <circ-port height="8" pin="280,80" width="8" x="46" y="56"/>
-      <circ-port height="8" pin="380,360" width="8" x="46" y="66"/>
-      <circ-port height="8" pin="290,150" width="8" x="46" y="76"/>
-      <circ-port height="10" pin="780,290" width="10" x="125" y="65"/>
-      <circ-port height="8" pin="310,310" width="8" x="46" y="86"/>
-      <circ-anchor facing="east" height="6" width="6" x="127" y="67"/>
+      <rect fill="none" height="127" stroke="#000000" stroke-width="2" width="182" x="50" y="55"/>
+      <text font-family="SansSerif" font-size="26" text-anchor="middle" x="182" y="143">RAM</text>
+      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="66" y="163">clk</text>
+      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="82" y="135">MemRW</text>
+      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="86" y="104">WriteData</text>
+      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="89" y="74">WriteAddr</text>
+      <text font-family="SansSerif" font-size="12" text-anchor="middle" x="191" y="85">ReadData</text>
+      <circ-port height="8" pin="280,80" width="8" x="46" y="66"/>
+      <circ-port height="8" pin="380,360" width="8" x="46" y="96"/>
+      <circ-port height="8" pin="290,150" width="8" x="46" y="126"/>
+      <circ-port height="10" pin="780,290" width="10" x="225" y="75"/>
+      <circ-port height="8" pin="310,310" width="8" x="46" y="156"/>
+      <circ-anchor facing="east" height="6" width="6" x="227" y="77"/>
     </appear>
     <wire from="(700,280)" to="(700,290)"/>
     <wire from="(340,150)" to="(340,250)"/>
@@ -197,6 +200,7 @@ This file is intended to be loaded by Logisim-evolution (https://github.com/reds
       <a name="dataWidth" val="32"/>
       <a name="trigger" val="falling"/>
       <a name="databus" val="bibus"/>
+      <a name="label" val="DMEM"/>
     </comp>
     <comp lib="0" loc="(280,80)" name="Pin">
       <a name="width" val="32"/>
