@@ -3,12 +3,11 @@ import os
 import sys
 import re
 
-### THIS CAN BE CLEANED UP
 try:
 	assembly_file = sys.argv[1]
 	num_cycles = int(sys.argv[2]) + 1 # need +1 because of lag in circuit
 except:
-	raise Exception("You need to provide a test name")
+	raise Exception("The format of this command should be: python create_test.py <test_name>.s <# cycles>")
 
 ### CREATES HEX FILE AND REFERENCE OUTPUT
 test_name = assembly_file[:-2] ## eliminates .s at end
