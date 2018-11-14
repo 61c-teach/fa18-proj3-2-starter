@@ -3,11 +3,10 @@ import os
 import sys
 import re
 
-
 ### THIS CAN BE CLEANED UP
 try:
 	assembly_file = sys.argv[1]
-	num_cycles = int(sys.argv[2]) + 2 # need +2 because of lag in circuit
+	num_cycles = int(sys.argv[2]) + 1 # need +1 because of lag in circuit
 except:
 	raise Exception("You need to provide a test name")
 
