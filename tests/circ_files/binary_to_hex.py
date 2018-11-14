@@ -8,7 +8,10 @@ def main(args):
 	file = open(args[1])
 	lines = [l for l in file.readlines()]
 	def mapper(strr):
-		return hex(int(strr, 2))[2:]
+		try: 
+			return hex(int(strr, 2))[2:]
+		except Exception: 
+			return 'x'
 	results = []
 	for l in lines:
 		hexes = list(map(mapper,l.split()))
