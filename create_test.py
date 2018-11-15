@@ -9,10 +9,10 @@ try:
 except:
 	raise Exception("The format of this command should be: python create_test.py <test_name>.s <# cycles>")
 
-### CREATES HEX FILE AND REFERENCE OUTPUT
+### CREATES HEX FILE
 test_name = assembly_file[:-2] ## eliminates .s at end
 prefix = 'CPU-' + test_name
-ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
+# ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
 hex_file = "./my_tests/input/" + test_name + ".hex"
 # os.system("java -jar venus-jvm-latest.jar -tf trace_format -ti -t " + assembly_file + " > " + ref_output)
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
