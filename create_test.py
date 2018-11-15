@@ -14,7 +14,7 @@ test_name = assembly_file[:-2] ## eliminates .s at end
 prefix = 'CPU-' + test_name
 ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
 hex_file = "./my_tests/input/" + test_name + ".hex"
-os.system("java -jar venus-jvm-latest.jar -tf trace_format -ti -t " + assembly_file + " > " + ref_output)
+# os.system("java -jar venus-jvm-latest.jar -tf trace_format -ti -t " + assembly_file + " > " + ref_output)
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
 os.system("cp " + assembly_file + " my_tests/input/")
 
@@ -61,5 +61,5 @@ os.chdir("circ_files")
 
 ### GENERATES STUDENT OUTPUT
 output = "./output/" + prefix + ".out"
-reference_output = "./reference_output/" + prefix + ".out"
+# reference_output = "./reference_output/" + prefix + ".out"
 os.system("java -jar logisim-evolution.jar -tty table " + prefix + ".circ > " + output)
