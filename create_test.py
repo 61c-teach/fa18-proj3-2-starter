@@ -18,6 +18,10 @@ ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
 hex_file = "./my_tests/input/" + test_name + ".hex"
 with open("trace_format", "w") as f:
 	f.write(trace_format)
+if not os.path.exists("my_tests/circ_files/reference_output"):
+    os.makedirs("my_tests/circ_files/reference_output")
+if not os.path.exists("my_tests/input"):
+    os.makedirs("my_tests/input")
 os.system("java -jar venus-jvm-latest.jar " + assembly_file + " -tf trace_format -t -ts -tw -ti -r > " + ref_output)
 os.system("rm -f trace_format")
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
