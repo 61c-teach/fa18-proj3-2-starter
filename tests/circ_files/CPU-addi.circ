@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project source="2.14.6" version="1.0">
-This file is intended to be loaded by Logisim-evolution (https://github.com/reds-heig/logisim-evolution).
-<lib desc="#Wiring" name="0">
+  This file is intended to be loaded by Logisim-evolution (https://github.com/reds-heig/logisim-evolution).
+
+  <lib desc="#Wiring" name="0">
     <tool name="Splitter">
       <a name="facing" val="west"/>
       <a name="incoming" val="32"/>
@@ -427,7 +428,7 @@ This file is intended to be loaded by Logisim-evolution (https://github.com/reds
       <a name="addrWidth" val="14"/>
       <a name="dataWidth" val="32"/>
       <a name="contents">addr/data: 14 32
-500293 728313 928013
+500293 728313 928413
 </a>
     </comp>
   </circuit>
