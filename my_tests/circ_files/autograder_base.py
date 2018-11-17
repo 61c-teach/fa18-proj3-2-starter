@@ -67,7 +67,10 @@ class AbsoluteTestCase(TestCase):
       reference = open(self.tracefile)
       passed = student_reference_match_unbounded(outfile, reference)
     finally:
-      os.kill(proc.pid,signal.SIGTERM)
+      try:
+        os.kill(proc.pid,signal.SIGTERM)
+      except Exception as e:
+        pass
     if passed:
       return (self.points,"Matched expected output")
     else:
@@ -132,5 +135,5 @@ def test_submission(name,outfile,tests):
 
 
 def main(tests):
-  test_submission('user',sys.stdout,tests)
+  test_submission('sanity',sys.stdout,tests)
     
