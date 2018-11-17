@@ -23,7 +23,7 @@ if not os.path.exists("my_tests/circ_files/reference_output"):
     os.makedirs("my_tests/circ_files/reference_output")
 if not os.path.exists("my_tests/input"):
     os.makedirs("my_tests/input")
-os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -r " + assembly_file + " > " + ref_output)
+os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -tn " + str(num_cycles + 1) + " -r " + assembly_file + " > " + ref_output)
 os.system("rm -f trace_format")
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
 os.system("cp " + assembly_file + " my_tests/input/")
@@ -31,16 +31,15 @@ os.system("cp " + assembly_file + " my_tests/input/")
 ### FORMATS HEX FOR INPUTTING INTO CIRCUIT
 instructions = ""
 with open(hex_file, "r") as f:
-	nums = f.read().split("\n")
-	nums.pop()
-	nums.pop()
-	# pops get ride of extra newlines that venus automatically adds
-	for num in nums:
-		num = num[2:] # removes 0x as beginning
-		instructions += num + " "
+    nums = f.read().split("\n")
+    nums.pop()
+    # pops get ride of extra newlines that venus automatically adds
+    for num in nums:
+        num = num[2:] # removes 0x as beginning
+        instructions += num + " "
 
-	instructions = instructions[:-1] # gets rid of extra space at end
-	instructions += "\n"
+    instructions = instructions[:-1] # gets rid of extra space at end
+    instructions += "\n"
 
 ### PUTS TESTS INTO CIRCUIT
 tree = ET.parse('run.circ')
