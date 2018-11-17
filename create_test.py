@@ -16,9 +16,8 @@ test_name = assembly_file[:-2] ## eliminates .s at end
 prefix = 'CPU-' + test_name
 ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
 hex_file = "./my_tests/input/" + test_name + ".hex"
-f = open("trace_format", "w")
-f.write(trace_format)
-f.close()
+with open("trace_format", "w") as f:
+	f.write(trace_format)
 if not os.path.exists("my_tests/circ_files/reference_output"):
     os.makedirs("my_tests/circ_files/reference_output")
 if not os.path.exists("my_tests/input"):
@@ -27,6 +26,15 @@ os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -tn " 
 os.system("rm -f trace_format")
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
 os.system("cp " + assembly_file + " my_tests/input/")
+
+
+### CLEANS UP REFERENCE OUTPUT
+with open(ref_output, "r+") as f:
+	out = f.read()
+	out = re.sub("\n\n", "\n", out)
+	f.seek(0)
+	f.write(out)
+	f.truncate()
 
 ### FORMATS HEX FOR INPUTTING INTO CIRCUIT
 instructions = ""
