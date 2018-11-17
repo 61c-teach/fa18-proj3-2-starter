@@ -3,6 +3,8 @@ import os
 import sys
 import re
 
+trace_format = "%1%\t%2%\t%5%\t%6%\t%7%\t%8%\t%9%\t%10%\t%pc%\t%inst%\t%line%\n"
+
 try:
 	assembly_file = sys.argv[1]
 	num_cycles = int(sys.argv[2]) + 1 # need +1 because of lag in circuit
@@ -12,9 +14,13 @@ except:
 ### CREATES HEX FILE
 test_name = assembly_file[:-2] ## eliminates .s at end
 prefix = 'CPU-' + test_name
-# ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
+ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
 hex_file = "./my_tests/input/" + test_name + ".hex"
-# os.system("java -jar venus-jvm-latest.jar -tf trace_format -ti -t " + assembly_file + " > " + ref_output)
+f = open("trace_format", "w")
+f.write(trace_format)
+f.close()
+os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -r " + assembly_file + " > " + ref_output)
+os.system("rm -f trace_format")
 os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
 os.system("cp " + assembly_file + " my_tests/input/")
 
@@ -52,14 +58,4 @@ tree.write(prefix + '.circ')
 
 ### MOVES THINGS WHERE THEY SHOULD BE
 os.system("mv " + prefix + ".circ my_tests/circ_files/")
-os.system("cp mem.circ my_tests/circ_files")
-os.system("cp alu.circ my_tests/circ_files")
-os.system("cp regfile.circ my_tests/circ_files")
-os.system("cp cpu.circ my_tests/circ_files")
-os.chdir("my_tests")
-os.chdir("circ_files")
-
-### GENERATES STUDENT OUTPUT
-output = "./output/" + prefix + ".out"
-# reference_output = "./reference_output/" + prefix + ".out"
-os.system("java -jar logisim-evolution.jar -tty table " + prefix + ".circ > " + output)
+print("Test created!")
