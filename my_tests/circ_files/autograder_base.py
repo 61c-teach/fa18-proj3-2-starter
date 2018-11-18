@@ -80,7 +80,7 @@ class AbsoluteTestCase(TestCase):
 
 def test_submission(name,outfile,tests):
   # actual submission testing code
-  print ("Testing submission for %s..." % name)
+  print ("Testing your tests")
   total_points = 0
   total_points_received = 0
   tests_passed = 0
@@ -135,5 +135,5 @@ def test_submission(name,outfile,tests):
 
 
 def main(tests):
-  test_submission('sanity',sys.stdout,tests)
+  test_submission('you',sys.stdout,tests)
     
