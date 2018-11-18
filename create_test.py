@@ -1,72 +1,86 @@
 import xml.etree.ElementTree as ET
+from optparse import OptionParser
 import os
-import sys
 import re
 
-trace_format = "%1%\t%2%\t%5%\t%6%\t%7%\t%8%\t%9%\t%10%\t%pc%\t%inst%\t%line%\n"
 
-try:
-	assembly_file = sys.argv[1]
-	num_cycles = int(sys.argv[2]) + 1 # need +1 because of lag in circuit
-except:
-	raise Exception("The format of this command should be: python create_test.py <test_name>.s <# cycles>")
+def main(assembly_file, num_cycles):
+    trace_format = "%1%\t%2%\t%5%\t%6%\t%7%\t%8%\t%9%\t%10%\t%pc%\t%inst%\t%line%\n"
 
-### CREATES HEX FILE
-test_name = assembly_file[:-2] ## eliminates .s at end
-prefix = 'CPU-' + test_name
-ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
-hex_file = "./my_tests/input/" + test_name + ".hex"
-with open("trace_format", "w") as f:
-	f.write(trace_format)
-if not os.path.exists("my_tests/circ_files/reference_output"):
-    os.makedirs("my_tests/circ_files/reference_output")
-if not os.path.exists("my_tests/input"):
-    os.makedirs("my_tests/input")
-os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -tn " + str(num_cycles + 1) + " -r " + assembly_file + " > " + ref_output)
-os.system("rm -f trace_format")
-os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
-os.system("cp " + assembly_file + " my_tests/input/")
+    ### CREATES HEX FILE
+    test_name = assembly_file[:-2] ## eliminates .s at end
+    prefix = 'CPU-' + test_name
+    ref_output = "./my_tests/circ_files/reference_output/" + prefix + ".out"
+    hex_file = "./my_tests/input/" + test_name + ".hex"
 
+    with open("trace_format", "w") as f:
+    	f.write(trace_format)
 
-### CLEANS UP REFERENCE OUTPUT
-with open(ref_output, "r+") as f:
-	out = f.read()
-	out = re.sub("\n\n", "\n", out)
-	f.seek(0)
-	f.write(out)
-	f.truncate()
+    if not os.path.exists("my_tests/circ_files/reference_output"):
+        os.makedirs("my_tests/circ_files/reference_output")
+    if not os.path.exists("my_tests/input"):
+        os.makedirs("my_tests/input")
 
-### FORMATS HEX FOR INPUTTING INTO CIRCUIT
-instructions = ""
-with open(hex_file, "r") as f:
-    nums = f.read().split("\n")
-    nums.pop()
-    # pops get ride of extra newlines that venus automatically adds
-    for num in nums:
-        num = num[2:] # removes 0x as beginning
-        instructions += num + " "
+    # Creates ref file
+    os.system("java -jar venus-jvm-latest.jar -t -tf trace_format -ti -tw -ts -r " + assembly_file + " > " + ref_output)
+    os.system("rm -f trace_format")
 
-    instructions = instructions[:-1] # gets rid of extra space at end
-    instructions += "\n"
+    # Creates hex file
+    os.system("java -jar venus-jvm-latest.jar -d " + assembly_file + " > " + hex_file)
+    os.system("cp " + assembly_file + " my_tests/input/")
 
-### PUTS TESTS INTO CIRCUIT
-tree = ET.parse('run.circ')
-root = tree.getroot()
-circuit = root.find('circuit')
-ROM = circuit.find("./comp/[@name='ROM']")
+    ### CLEANS UP REFERENCE OUTPUT AND GETS NUM_CYCLES
+    with open(ref_output, "r+") as f:
+        out = f.read()
+        out = re.sub("\n\n", "\n", out)
+        if num_cycles == -1:
+            num_cycles = len(out.split("\n")) - 2 # gotta account for extra new lines
+        f.seek(0)
+        f.write(out)
+        f.truncate()
 
-pre = "addr/data: 14 32\n"
-result = pre + instructions
+    ### FORMATS HEX FOR INPUTTING INTO CIRCUIT
+    instructions = ""
+    with open(hex_file, "r") as f:
+        nums = f.read().split("\n")
+        nums.pop()
+        # pops get ride of extra newlines that venus automatically adds
+        for num in nums:
+            num = num[2:] # removes 0x as beginning
+            instructions += num + " "
 
-ROM[2].text = result
+        instructions = instructions[:-1] # gets rid of extra space at end
+        instructions += "\n"
 
-### PUTS CYLCLE NUM INTO CIRCUIT
-constant = circuit.find("./comp/[@name='Constant']")
-num_cycles_formatted = hex(num_cycles)
-constant[1].attrib['val'] = num_cycles_formatted
+    ### PUTS TESTS INTO CIRCUIT
+    tree = ET.parse('run.circ')
+    root = tree.getroot()
+    circuit = root.find('circuit')
+    ROM = circuit.find("./comp/[@name='ROM']")
 
-tree.write(prefix + '.circ')
+    pre = "addr/data: 14 32\n"
+    result = pre + instructions
 
-### MOVES THINGS WHERE THEY SHOULD BE
-os.system("mv " + prefix + ".circ my_tests/circ_files/")
-print("Test created!")
+    ROM[2].text = result
+
+    ### PUTS CYLCLE NUM INTO CIRCUIT
+    constant = circuit.find("./comp/[@name='Constant']")
+    num_cycles_formatted = hex(num_cycles)
+    constant[1].attrib['val'] = num_cycles_formatted
+
+    tree.write(prefix + '.circ')
+
+    ### MOVES THINGS WHERE THEY SHOULD BE
+    os.system("mv " + prefix + ".circ my_tests/circ_files/")
+    print("Test created!")
+
+if __name__ == "__main__":
+
+    parser = OptionParser()
+
+    parser.add_option("-t", "--test", help="Which the test you want to create")
+    parser.add_option("-n", "--num_cycles", default="-1", help="How many cycles to simulate the CPU for (default is however long until your code terminates)")
+
+    (options, args) = parser.parse_args()
+
+    main(options.test, int(options.num_cycles))
